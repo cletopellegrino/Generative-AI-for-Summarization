@@ -7648,9 +7648,9 @@ a.anchor-link {
                 <span class="n">ending_index</span> <span class="o">=</span> <span class="n">text_without_the_preamble</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="sa">r</span><span class="s2">"IN WITNESS WHEREOF"</span><span class="p">)</span> 
                 <span class="k">if</span> <span class="n">ending_index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">preprocess_text</span><span class="p">(</span><span class="n">text_without_the_preamble</span><span class="p">)</span>
-    <span class="n">testo_without_the_sign</span> <span class="o">=</span> <span class="n">text_without_the_preamble</span><span class="p">[:</span><span class="n">ending_index</span><span class="p">]</span>
+    <span class="n">text_without_the_sign</span> <span class="o">=</span> <span class="n">text_without_the_preamble</span><span class="p">[:</span><span class="n">ending_index</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">preprocess_text</span><span class="p">(</span><span class="n">testo_without_the_sign</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">preprocess_text</span><span class="p">(</span><span class="n">text_without_the_sign</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
