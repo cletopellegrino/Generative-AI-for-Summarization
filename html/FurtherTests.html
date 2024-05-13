@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Summarization-EUR-LEX</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>FurtherTests</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7475,7 +7475,7 @@ a.anchor-link {
 </style>
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
-<main><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=343ea15e-e8f9-4c17-a9b8-339f8c9d5ce2">
+<main><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6114fa1f-34d2-48d6-b242-9fa415b94c70">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7487,14 +7487,15 @@ a.anchor-link {
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">T5Tokenizer</span><span class="p">,</span> <span class="n">T5ForConditionalGeneration</span>
+<span class="kn">from</span> <span class="nn">bert_score</span> <span class="kn">import</span> <span class="n">score</span>
 
-<span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"dataset/test_processed.csv"</span><span class="p">)</span>
+<span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"dataset/train_processed.csv"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=bd86cedd-db9d-44e9-ae8e-36ef22295689">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=71865b10-ff3c-4cc7-8dad-8180195d863b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7508,7 +7509,7 @@ a.anchor-link {
 <span class="n">model_t5</span> <span class="o">=</span> <span class="n">T5ForConditionalGeneration</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">"google-t5/t5-large"</span><span class="p">)</span>
 <span class="n">model_t5</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
-<span class="n">tokenizer_t5</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">,</span> <span class="n">model_t5</span>
+<span class="n">tokenizer_t5</span><span class="o">.</span><span class="n">model_max_length</span> <span class="o">=</span> <span class="mi">4096</span> 
 </pre></div>
 </div>
 </div>
@@ -7526,287 +7527,14 @@ Special tokens have been added in the vocabulary, make sure the associated word 
 </pre>
 </div>
 </div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>(1000000000000000019884624838656,
- T5ForConditionalGeneration(
-   (shared): Embedding(32128, 1024)
-   (encoder): T5Stack(
-     (embed_tokens): Embedding(32128, 1024)
-     (block): ModuleList(
-       (0): T5Block(
-         (layer): ModuleList(
-           (0): T5LayerSelfAttention(
-             (SelfAttention): T5Attention(
-               (q): Linear(in_features=1024, out_features=1024, bias=False)
-               (k): Linear(in_features=1024, out_features=1024, bias=False)
-               (v): Linear(in_features=1024, out_features=1024, bias=False)
-               (o): Linear(in_features=1024, out_features=1024, bias=False)
-               (relative_attention_bias): Embedding(32, 16)
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-           (1): T5LayerFF(
-             (DenseReluDense): T5DenseActDense(
-               (wi): Linear(in_features=1024, out_features=4096, bias=False)
-               (wo): Linear(in_features=4096, out_features=1024, bias=False)
-               (dropout): Dropout(p=0.1, inplace=False)
-               (act): ReLU()
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-         )
-       )
-       (1-23): 23 x T5Block(
-         (layer): ModuleList(
-           (0): T5LayerSelfAttention(
-             (SelfAttention): T5Attention(
-               (q): Linear(in_features=1024, out_features=1024, bias=False)
-               (k): Linear(in_features=1024, out_features=1024, bias=False)
-               (v): Linear(in_features=1024, out_features=1024, bias=False)
-               (o): Linear(in_features=1024, out_features=1024, bias=False)
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-           (1): T5LayerFF(
-             (DenseReluDense): T5DenseActDense(
-               (wi): Linear(in_features=1024, out_features=4096, bias=False)
-               (wo): Linear(in_features=4096, out_features=1024, bias=False)
-               (dropout): Dropout(p=0.1, inplace=False)
-               (act): ReLU()
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-         )
-       )
-     )
-     (final_layer_norm): T5LayerNorm()
-     (dropout): Dropout(p=0.1, inplace=False)
-   )
-   (decoder): T5Stack(
-     (embed_tokens): Embedding(32128, 1024)
-     (block): ModuleList(
-       (0): T5Block(
-         (layer): ModuleList(
-           (0): T5LayerSelfAttention(
-             (SelfAttention): T5Attention(
-               (q): Linear(in_features=1024, out_features=1024, bias=False)
-               (k): Linear(in_features=1024, out_features=1024, bias=False)
-               (v): Linear(in_features=1024, out_features=1024, bias=False)
-               (o): Linear(in_features=1024, out_features=1024, bias=False)
-               (relative_attention_bias): Embedding(32, 16)
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-           (1): T5LayerCrossAttention(
-             (EncDecAttention): T5Attention(
-               (q): Linear(in_features=1024, out_features=1024, bias=False)
-               (k): Linear(in_features=1024, out_features=1024, bias=False)
-               (v): Linear(in_features=1024, out_features=1024, bias=False)
-               (o): Linear(in_features=1024, out_features=1024, bias=False)
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-           (2): T5LayerFF(
-             (DenseReluDense): T5DenseActDense(
-               (wi): Linear(in_features=1024, out_features=4096, bias=False)
-               (wo): Linear(in_features=4096, out_features=1024, bias=False)
-               (dropout): Dropout(p=0.1, inplace=False)
-               (act): ReLU()
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-         )
-       )
-       (1-23): 23 x T5Block(
-         (layer): ModuleList(
-           (0): T5LayerSelfAttention(
-             (SelfAttention): T5Attention(
-               (q): Linear(in_features=1024, out_features=1024, bias=False)
-               (k): Linear(in_features=1024, out_features=1024, bias=False)
-               (v): Linear(in_features=1024, out_features=1024, bias=False)
-               (o): Linear(in_features=1024, out_features=1024, bias=False)
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-           (1): T5LayerCrossAttention(
-             (EncDecAttention): T5Attention(
-               (q): Linear(in_features=1024, out_features=1024, bias=False)
-               (k): Linear(in_features=1024, out_features=1024, bias=False)
-               (v): Linear(in_features=1024, out_features=1024, bias=False)
-               (o): Linear(in_features=1024, out_features=1024, bias=False)
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-           (2): T5LayerFF(
-             (DenseReluDense): T5DenseActDense(
-               (wi): Linear(in_features=1024, out_features=4096, bias=False)
-               (wo): Linear(in_features=4096, out_features=1024, bias=False)
-               (dropout): Dropout(p=0.1, inplace=False)
-               (act): ReLU()
-             )
-             (layer_norm): T5LayerNorm()
-             (dropout): Dropout(p=0.1, inplace=False)
-           )
-         )
-       )
-     )
-     (final_layer_norm): T5LayerNorm()
-     (dropout): Dropout(p=0.1, inplace=False)
-   )
-   (lm_head): Linear(in_features=1024, out_features=32128, bias=False)
- ))</pre>
 </div>
 </div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=3dd3ae5d-b058-4801-b104-7e85a1a3bd60">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c9585bbe-bfdb-4fd0-857d-cc6cf2efcb49">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">tokenizer_t5</span><span class="o">.</span><span class="n">model_max_length</span> <span class="o">=</span> <span class="mi">4096</span> 
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=1dd76f09-78f6-4deb-a50b-2cc362f10fd7">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">GoBackReadingWindow</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">:</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="s2">"summarize: "</span> <span class="o">+</span> <span class="n">text</span><span class="p">,</span>\
-                           <span class="n">return_tensors</span><span class="o">=</span><span class="s2">"pt"</span><span class="p">,</span>\
-                           <span class="n">max_length</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">,</span>\
-                           <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    
-    <span class="n">OVERLAP</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span> <span class="o">*</span> <span class="mf">0.2</span><span class="p">)</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-    <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">while</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
-        <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]))</span>
-        <span class="n">start</span> <span class="o">+=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span> <span class="o">-</span> <span class="n">OVERLAP</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">))</span>
-    
-    <span class="n">summarized_chunks</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="s2">"summarize: "</span> <span class="o">+</span> <span class="n">chunk</span><span class="p">,</span>\
-                           <span class="n">return_tensors</span><span class="o">=</span><span class="s2">"pt"</span><span class="p">,</span>\
-                           <span class="n">max_length</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">,</span>\
-                           <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">)</span>
-        <span class="n">summarized_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-        <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
-    
-    <span class="n">summarized_text</span> <span class="o">=</span> <span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">summarized_chunks</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">summarized_text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">GoBackReadingWindow</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">summarized_text</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="s2">"summarize: "</span> <span class="o">+</span> <span class="n">summarized_text</span><span class="p">,</span>\
-                           <span class="n">return_tensors</span><span class="o">=</span><span class="s2">"pt"</span><span class="p">,</span>\
-                           <span class="n">max_length</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">,</span>\
-                           <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=f8a14966-abf4-428e-a4b3-bae56e660010">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">ReadingAfterwardsWindow</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">:</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="s2">"summarize: "</span> <span class="o">+</span> <span class="n">text</span><span class="p">,</span>\
-                           <span class="n">return_tensors</span><span class="o">=</span><span class="s2">"pt"</span><span class="p">,</span>\
-                           <span class="n">max_length</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">,</span>\
-                           <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    
-    <span class="n">OVERLAP</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span> <span class="o">*</span> <span class="mf">0.2</span><span class="p">)</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-    <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="n">isfirts</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">while</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">isfirts</span><span class="p">:</span>
-            <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]))</span>
-            <span class="n">isfirts</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">OVERLAP</span><span class="p">:</span><span class="n">end</span><span class="p">])</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span class="o">+</span> <span class="n">OVERLAP</span><span class="p">]))</span>
-        <span class="n">start</span> <span class="o">+=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span> <span class="o">-</span> <span class="n">OVERLAP</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">))</span>
-    
-    <span class="n">summarized_chunks</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="s2">"summarize: "</span> <span class="o">+</span> <span class="n">chunk</span><span class="p">,</span>\
-                           <span class="n">return_tensors</span><span class="o">=</span><span class="s2">"pt"</span><span class="p">,</span>\
-                           <span class="n">max_length</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">,</span>\
-                           <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">)</span>
-        <span class="n">summarized_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-        <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
-    
-    <span class="n">summarized_text</span> <span class="o">=</span> <span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">summarized_chunks</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">summarized_text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">ReadingAfterwardsWindow</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">summarized_text</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="s2">"summarize: "</span> <span class="o">+</span> <span class="n">summarized_text</span><span class="p">,</span>\
-                           <span class="n">return_tensors</span><span class="o">=</span><span class="s2">"pt"</span><span class="p">,</span>\
-                           <span class="n">max_length</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">,</span>\
-                           <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">model_max_length</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c528da8b-e79c-49c5-a75d-3892ccdc685d">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">ReadingWithJumpingWindow</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
@@ -7859,1195 +7587,27 @@ Special tokens have been added in the vocabulary, make sure the associated word 
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=76f02611-6044-4e5e-a70a-2dbf4e32b6cc">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=74c8fa2d-9298-4d56-af1f-e665a46cf5b4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>All the tests were performed by using just 30 texts for the following reasons:</p>
-<ul>
-<li>Using all the dataset would take days to elaborate</li>
-<li>The statistical method adopted (kruskal) have as an assumption to have at least 5 observations (<a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kruskal.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kruskal.html</a>)</li>
-</ul>
+<p>The following test was done to assess the performance on the model on texts that it can analyze without splitting it in chunks</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0c6e468e-fe32-49d5-bf5a-e1079f86d77b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=392ebc7a-68fe-40b1-8544-c029aa7e6a18">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">bert_score</span> <span class="kn">import</span> <span class="n">score</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">F1_t5_less_4096</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="n">F1_t51</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">[:</span><span class="mi">30</span><span class="p">]</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-    <span class="n">reference_text</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"reference"</span><span class="p">]</span>
-    <span class="n">reference_summary</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"summary"</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"reference_tokens"</span><span class="p">])</span>
-
-    <span class="n">result_summary</span> <span class="o">=</span> <span class="n">GoBackReadingWindow</span><span class="p">(</span><span class="n">model_t5</span><span class="p">,</span> <span class="n">tokenizer_t5</span><span class="p">,</span> <span class="n">reference_text</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">result_summary</span><span class="p">)</span>
-    <span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">F1</span> <span class="o">=</span> <span class="n">score</span><span class="p">([</span><span class="n">result_summary</span><span class="p">],</span> <span class="p">[</span><span class="n">reference_summary</span><span class="p">],</span> <span class="n">lang</span><span class="o">=</span><span class="s1">'en'</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"T5 BertScore F1: </span><span class="si">{</span><span class="n">F1</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="n">F1_t51</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">F1</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
-
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">'F1_t51.npy'</span><span class="p">,</span> <span class="n">F1_t51</span><span class="p">)</span>
-
-<span class="n">sum1</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">F1_t51</span><span class="p">:</span>
-    <span class="n">sum1</span> <span class="o">+=</span> <span class="n">_</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sum1</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">F1_t51</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>4996
-2
-eu regulation establishes uniform rule on publication of national provision concerning marketing requirement for collective investment undertaking. it also provides for the establishment of a central database on the cross-border marketing of collective investment undertaking.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-14373
-5
-eu regulation aims to improve functioning of internal market by strengthening market surveillance of product covered by union harmonisation legislation. each member state shall designate one or more market surveillance authority in its territory.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-2073
-eu directive aims to enhance cross-border access to a greater number of television and radio programme. it lay down rule for the transmission of television and radio programme through the process of direct injection. member state shall ensure that rightholders may exercise their right to grant or refuse the authorisation for a retransmission.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.83
-5690
-2
-eu rules on mutual recognition apply to goods lawfully marketed in another member state. they apply to goods that are lawfully marketed in the member state of destination. the regulation is intended to strengthen the functioning of the internal market.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-3990
-.eu country code top-level domain ( cctld ) is a. european union country code top-level domain ( cctld ) it is intended to support the digital single market. it also lay down the condition for its implementation, including the designation and characteristic of the registry.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-11101
-4
-the cef is a new eu instrument to support the development of trans-european network. it is open to the participation of third country in the eu free trade association. only action which contribute to the achievement of one or more objective of at least two sector shall be eligible.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.79
-7399
-3
-terrorist content and related data shall be preserved for six month. the right to challenge a removal order shall be extended to six weeks. terrorist content and related data shall be preserved for six month.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.78
-21083
-7
-horizon europe is a four-year programme to support research and innovation in europe. it is intended to deliver scientific, technological, economic and societal impact. pillar i 'excellent science' shall be the main focus of the programme. pillar ii 'innovative europe' shall be the main focus of the eit.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-31669
-10
-eu rules on procurement and financial management are amended. they apply to the eu's telecommunications programme. esa shall ensure a high degree of security with regard to the programme.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-8289
-3
-programme aims to support and accelerate the digital transformation of the european economy, industry and society. it will foster greater professionalism, especially with regard to high performance computing, big data analytics, cybersecurity and blockchain. funding for action which do not comply with ethical requirement may be suspended, terminated or reduced at any time.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-9686
-3
-programme aims to protect and empower consumer and business, especially smes. it will also promote a high level of consumer protection and product safety. programme may finance up to 100 % of eligible cost for financial support to third party.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-7910
-3
-firearm means portable barrelled weapon designed to expel shot, bullet or projectile by the action of a combustible propellant. a 'european firearm pas' shall be issued on request by the competent authority of a member state to a person lawfully entering into possession of and using firearm. firearm may be transferred from one member state to another without authorisation.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.79
-5847
-2
-emswe is a harmonised interface for the electronic transmission of information. it is intended to facilitate the electronic transmission of information. member states shall establish a maritime national single window. it shall accept submission of information on a voluntary basis.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-10969
-4
-eets provider must provide a service to a road user in the eets domain. they must also provide the information necessary to identify suspected offender. member state must ensure eets provider maintain coverage of all eets domain on their territory.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-3579
-a european network of immigration liaison officer is established. it aims to enhance cooperation and coordination among immigration liaison officer deployed to third country by member state, the commission and union agency. information shall be exchanged via a secure web-based information exchange platform. the information shall not contain personal data or any link through which such personal data is directly or indirectly available.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-3503
-eu has adopted a regulation to strengthen security standard for identity card issued by member state to their own national and residence document. the regulation applies to. identity card issued to union citizen and their family member when exercising their right to free movement.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-11563
-4
-ecris-tcn is a system to identify member state holding previous conviction. it is intended to be used to obtain information on previous conviction. each member state shall ensure that the data are processed lawfully.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-31622
-10
-eu-lisa shall develop and manage the european search portal ( esp ) it shall query the ee, vi, etias, eurodac, si and interpol database. it shall provide reply to the user a soon a data are available. data shall be stored in the shared bm for a minimum of one year.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.79
-27198
-9
-eu directive establishes a common framework for the promotion of energy from renewable source. it also lay down rule on financial support for electricity from renewable source. it also establishes sustainability and greenhouse gas emission saving criterion for biofuels.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.84
-51813
-16
-eu directive aims to ensure harmonised regulation of electronic communication network, associated facility and associated service. member states shall ensure that national regulatory authority take all reasonable measure. national regulatory authority shall ensure that they act impartially, transparently and in a timely manner.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-2208
-the regulation applies to the monitoring and reporting by member state and manufacturer of heavy-duty vehicle. it applies with regard to the following vehicle category. data relating to new heavy-duty vehicle registered in the union shall be monitored and reported by 28 february each year.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.83
-15661
-5
-luxembourg, slovenia and sweden shall inform the commission of the number of gas installations in their territory. slovenia shall not be bound by the obligation set out in paragraph 1 of this article. the preventive action plan shall be updated every four year after 1 march 2019.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.79
-8895
-3
-a to g rescaled label shall be introduced by 2 august 2023. commission shall ensure that the label is homogenous.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.79
-34094
-11
-eu regulations apply to the processing of personal data in the uk and u.s. they apply to the processing of personal data by controllers established in the uk and u.s. the data subject has the right to access, rectify, delete or limit the data processed.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-4713
-2
-harmonised index of consumer price (hicp, hicp-ct, ooh price index) and of the house price index ( hpi) shall be produced at union and national level. member state shall provide the commission with the harmonised index and all sub-indices at monthly interval.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.83
-17067
-6
-investigation shall cover both dumping and injury. investigation shall be concluded within 15 month of the initiation.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-15049
-5
-subsidy shall be subject to countervailing measure if it is specific. investigation shall cover both subsidy and injury to union industry. commission shall take into account any'special circumstances'.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.79
-18771
-6
-eu guarantee shall be provided for financing and investment operation. it shall be provided by the union budget for the period 2021 to 2027. unused amount of provisioning attributable to amount allocated by member state shall be paid back to the member state.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.79
-12982
-4
-the recovery and resilience facility is a new eu instrument. it aims to support member states in achieving milestones and targets. the maximum amount of the loan support for each member state shall not exceed 6,8 % of it 2019 gni.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-4734
-2
-instrument is to be used to support member state in implementing reform. it is necessary to encourage investment and to increase competitiveness. limited part of the work programme, not exceeding 30 % of the yearly allocation, shall be reserved for special measure.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-0.8080353379249573
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c02508b5-db32-43a3-96a7-f7689f1832a4">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">F1_t52</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">[:</span><span class="mi">30</span><span class="p">]</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-    <span class="n">reference_text</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"reference"</span><span class="p">]</span>
-    <span class="n">reference_summary</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"summary"</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"reference_tokens"</span><span class="p">])</span>
-
-    <span class="n">result_summary</span> <span class="o">=</span> <span class="n">ReadingAfterwardsWindow</span><span class="p">(</span><span class="n">model_t5</span><span class="p">,</span> <span class="n">tokenizer_t5</span><span class="p">,</span> <span class="n">reference_text</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">result_summary</span><span class="p">)</span>
-    <span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">F1</span> <span class="o">=</span> <span class="n">score</span><span class="p">([</span><span class="n">result_summary</span><span class="p">],</span> <span class="p">[</span><span class="n">reference_summary</span><span class="p">],</span> <span class="n">lang</span><span class="o">=</span><span class="s1">'en'</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"T5 BertScore F1: </span><span class="si">{</span><span class="n">F1</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="n">F1_t52</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">F1</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
-
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">'F1_t52.npy'</span><span class="p">,</span> <span class="n">F1_t52</span><span class="p">)</span>
-
-<span class="n">sum2</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">F1_t52</span><span class="p">:</span>
-    <span class="n">sum2</span> <span class="o">+=</span> <span class="n">_</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sum2</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">F1_t52</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>4996
-2
-eu regulation establishes uniform rule on publication of national provision concerning marketing requirement for collective investment undertaking. it also provides for the establishment of a central database on the cross-border marketing of collective investment undertaking.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-14373
-5
-eu regulation aims to improve functioning of internal market by strengthening market surveillance of product covered by union harmonisation legislation. each member state shall designate one or more market surveillance authority in its territory.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-2073
-eu directive aims to enhance cross-border access to a greater number of television and radio programme. it lay down rule for the transmission of television and radio programme through the process of direct injection. member state shall ensure that rightholders may exercise their right to grant or refuse the authorisation for a retransmission.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.83
-5690
-2
-eu rules on mutual recognition apply to goods lawfully marketed in another member state. they apply to goods that are lawfully marketed in the member state of destination.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-3990
-.eu country code top-level domain ( cctld ) is a. european union country code top-level domain ( cctld ) it is intended to support the digital single market. it also lay down the condition for its implementation, including the designation and characteristic of the registry.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-11101
-4
-cef is a new eu instrument to support the development of trans-european network. it is open to the participation of third country in the eu free trade association.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-7399
-3
-hosting service provider is exposed to terrorist content if it makes available information to the public for educational, journalistic, artistic or research purpose. decision on the specific measure shall be made by the competent authority of the member state where the hosting service provider is exposed.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-21083
-7
-pillar i of the programme aims to tackle climate change. pillar ii of the programme aims to tackle 'global challenge and european industrial competitiveness' priority shall be given to innovative smes and attention to their integration in collaborative project under pillar ii.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-31669
-10
-eu space programme aims to provide high-quality and up-to-date space data and information. eumetsat is the entrusted operator of the eu space agency. the agency shall ensure the security of the programme.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-8289
-3
-programme aims to support and accelerate the digital transformation of the european economy, industry and society. it will foster greater professionalism, especially with regard to high performance computing, big data analytics, cybersecurity and blockchain. programme shall be implemented under direct management, in accordance with the financial regulation.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-9686
-3
-programme aims to protect and empower consumer and business, especially smes. it will also promote a high level of consumer protection and product safety. programme may finance up to 100 % of eligible cost of an action.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-7910
-3
-firearm means portable barrelled weapon designed to expel shot, bullet or projectile by the action of a combustible propellant. a 'european firearm pas' shall be issued on request by the competent authority of a member state to a person lawfully entering into possession of and using firearm.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.79
-5847
-2
-emswe is a harmonised interface for the electronic transmission of information. it is intended to facilitate the electronic transmission of information. member states shall establish a maritime national single window.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-10969
-4
-eets provider must provide a service to a road user in the eets domain. they must also provide the information necessary to identify suspected offender. eets provider shall be entitled to be remunerated by the toll charger. member state shall adopt and publish by 19 october 2021 the law, regulation and administrative provision necessary to comply with article 1 to 27.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-3579
-a european network of immigration liaison officer is established. it aims to enhance cooperation and coordination among immigration liaison officer deployed to third country by member state, the commission and union agency. information shall be exchanged via a secure web-based information exchange platform. the information shall not contain personal data or any link through which such personal data is directly or indirectly available.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-3503
-eu has adopted a regulation to strengthen security standard for identity card issued by member state to their own national and residence document. the regulation applies to. identity card issued to union citizen and their family member when exercising their right to free movement.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-11563
-4
-ecris-tcn is a system to identify member state holding previous conviction. it was established in april 2012 and is used by the european commission. ecris-tcn is intended to be used to obtain information on previous conviction.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-31622
-10
-eu-lisa shall develop and manage the european search portal ( esp ) it shall query the ee, vi, etias, eurodac, si and interpol database. it shall provide reply to the user a soon a data are available from one of the eu.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.79
-27198
-9
-eu directive aims to encourage the use of renewable energy sources in the uk. it also establishes sustainability and greenhouse gas emission saving criterion for biofuels. directive repealed with effect from 1 july 2021.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-51813
-16
-eu directive aims to ensure harmonised regulation of electronic communication network, associated facility and associated service. member states shall ensure that in carrying out the regulatory task specified in this directive, the national regulatory authority shall be entitled to collect necessary data and information. member state shall ensure that the use of radio spectrum is organised on their territory in a way that no other member state is prevented from using it.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-2208
-the regulation applies to the monitoring and reporting by member state and manufacturer of heavy-duty vehicle. it applies with regard to the following vehicle category. data relating to new heavy-duty vehicle registered in the union shall be monitored and reported by 28 february each year.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.83
-15661
-5
-entsog shall carry out a union-wide simulation of gas supply and infrastructure disruption scenario. each member state shall make a national risk assessment of all relevant risk affecting the security of gas supply.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-8895
-3
-directive provides for the labelling of those product placed on market. it provides for the provision of standard product information regarding energy efficiency. it also provides supplementary information concerning product.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-34094
-11
-eu regulations apply to the processing of personal data in the uk and u.s. they apply to the processing of personal data by controllers established in the uk and u.s. the data subject has the right to withdraw his or her consent at any time. the data subject has the right to access, rectify, delete or limit the data processed. the data subject has the right to be informed of any data breach.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-4713
-2
-harmonised index of consumer price (hicp, hicp-ct, ooh price index) and of the house price index ( hpi) shall be produced at union and national level. member state shall provide the commission with the harmonised index and all sub-indices at monthly interval.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.83
-17067
-6
-investigation shall cover both dumping and injury. provisional anti-dumping duty shall not exceed the margin of dumping. measure shall be imposed by regulation and collected by member state.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-15049
-5
-subsidy shall be subject to countervailing measure if it is specific. investigation shall cover both subsidy and injury. definitive countervailing duty shall be imposed on all imports.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-18771
-6
-eu guarantee shall be provided for financing and investment operation. it shall be provided in the form of cash or guarantee by member state. unused amount of provisioning attributable to amount allocated by member state shall be paid back to member state.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.78
-12982
-4
-the recovery and resilience facility is a new eu instrument. it aims to support member states in achieving milestones and targets. the facility is to be used exclusively for the benefit of the member state concerned.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-4734
-2
-instrument is to be used to support member state in implementing reform. it is necessary to encourage investment and to increase competitiveness. by 31 december 2030, the commission shall provide a global assessment of the implementation.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-0.811858578523
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=bccf0a27-2cd5-47e7-b0b7-117ff10bb292">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">F1_t53</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">[:</span><span class="mi">30</span><span class="p">]</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">train_df</span><span class="p">[</span><span class="n">train_df</span><span class="p">[</span><span class="s1">'reference_tokens'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">4096</span><span class="p">][:</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
     <span class="n">reference_text</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"reference"</span><span class="p">]</span>
     <span class="n">reference_summary</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"summary"</span><span class="p">]</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"reference_tokens"</span><span class="p">])</span>
@@ -9056,15 +7616,15 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
     <span class="nb">print</span><span class="p">(</span><span class="n">result_summary</span><span class="p">)</span>
     <span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">F1</span> <span class="o">=</span> <span class="n">score</span><span class="p">([</span><span class="n">result_summary</span><span class="p">],</span> <span class="p">[</span><span class="n">reference_summary</span><span class="p">],</span> <span class="n">lang</span><span class="o">=</span><span class="s1">'en'</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"T5 BertScore F1: </span><span class="si">{</span><span class="n">F1</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="n">F1_t53</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">F1</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+    <span class="n">F1_t5_less_4096</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">F1</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
     <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
 
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">'F1_t53.npy'</span><span class="p">,</span> <span class="n">F1_t53</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">'F1_t5_less_4096.npy'</span><span class="p">,</span> <span class="n">F1_t5_less_4096</span><span class="p">)</span>
 
-<span class="n">sum3</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">F1_t53</span><span class="p">:</span>
-    <span class="n">sum3</span> <span class="o">+=</span> <span class="n">_</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sum3</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">F1_t53</span><span class="p">))</span>
+<span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">F1_t5_less_4096</span><span class="p">:</span>
+    <span class="nb">sum</span> <span class="o">+=</span> <span class="n">_</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">F1_t5_less_4096</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -9077,490 +7637,8 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>4996
-3
-eu regulation establishes uniform rule on publication of national provision concerning marketing requirement for collective investment undertaking. it also provides for the establishment of a central database on the cross-border marketing of collective investment undertaking.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-14373
-8
-eu regulation aims to improve functioning of internal market by strengthening market surveillance of product covered by union harmonisation legislation. a product subject to legislation referred to in paragraph 5 may be placed on the market only if there is an economic operator established in the union. market surveillance authority shall carry out appropriate check on the characteristic of product on an adequate scale. they shall require economic operator to remove content referring to product from online interface or to require explicit display of warning.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-2073
-eu directive aims to enhance cross-border access to a greater number of television and radio programme. it lay down rule for the transmission of television and radio programme through the process of direct injection. member state shall ensure that rightholders may exercise their right to grant or refuse the authorisation for a retransmission.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.83
-5690
-3
-eu rules on mutual recognition apply to goods lawfully marketed in another member state. they apply to goods that are lawfully marketed in the member state of destination. the regulation is intended to strengthen the functioning of the internal market.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-3990
-.eu country code top-level domain ( cctld ) is a. european union country code top-level domain ( cctld ) it is intended to support the digital single market. it also lay down the condition for its implementation, including the designation and characteristic of the registry.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-11101
-6
-the cef is a new eu instrument to support the development of trans-european network. it is open to participation of third country in accordance with eea agreement. only action which contribute to achievement of objective referred to in article 3 ( 2 ) shall be eligible for funding.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-7399
-4
-hosting service provider exposed to terrorist content shall take specific measure. terrorist content and related data shall be preserved for six month. right to an effective remedy shall include the right to challenge a removal order issued pursuant to article 3.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-21083
-11
-horizon europe is a four-year programme to support research and innovation in europe. funding under the programme shall be provided by means of grant. priority shall be given to innovative smes and special attention to their integration in collaborative project under pillar ii.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-31669
-16
-eu space programme is a ten-year programme covering the period 2021-2027. it is aimed at providing high-quality and up-to-date space data and information. the programme is open to the participation of third country and international organisation.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-8289
-5
-programme aims to support and accelerate the digital transformation of the european economy, industry and society. it shall be implemented in close coordination with other union programme. funding for action which do not comply with ethical requirement may be suspended, terminated or reduced at any time.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-9686
-5
-programme aims to improve the functioning of the internal market, the competitiveness and sustainability of enterprise. third country may be eligible for funding if they have no conflict of interest and represent the interest of union consumer. programme may finance up to 100 % of eligible cost of an action.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-7910
-4
-firearm means portable barrelled weapon designed to expel shot, bullet or projectile by the action of a combustible propellant. a 'european firearm pas' shall be issued on request by the competent authority of a member state to a person lawfully entering into possession of and using firearm. member state shall ensure that each firearm and each essential component subject to this directive is recorded.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-5847
-3
-emswe is a harmonised system for the electronic transmission of information. it is intended to facilitate the electronic transmission of information. member states shall establish a maritime national single window. it shall accept submission of information on a voluntary basis.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-10969
-6
-eets provider must provide data to the toll charger to ensure compliance with the directive. member state must ensure that eets provider are entitled to be remunerated by the toll charger. member state shall inform owner, holder of vehicle or other person suspected of failing to pay road fee due.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-3579
-a european network of immigration liaison officer is established. it aims to enhance cooperation and coordination among immigration liaison officer deployed to third country by member state, the commission and union agency. information shall be exchanged via a secure web-based information exchange platform. the information shall not contain personal data or any link through which such personal data is directly or indirectly available.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-3503
-eu has adopted a regulation to strengthen security standard for identity card issued by member state to their own national and residence document. the regulation applies to. identity card issued to union citizen and their family member when exercising their right to free movement.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-11563
-6
-ecris-tcn is a system to identify member state holding previous conviction. it was established to provide information on criminal record of third-country national. cost of ecris-tcn shall be borne by the general budget of the union.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-31622
-16
-eu-lisa shall develop and manage a european search portal ( esp ) it shall be used to search data related to person or their travel document. data shall be stored in a shared bm and a cir. the cir shall store data relating to each person registered in the ee, vi, etias, eurodac and ecris-tcn.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-27198
-14
-eu directive aims to increase the share of energy from renewable source in the union's gross final consumption of energy by 2030. it also establishes sustainability and greenhouse gas emission saving criterion for biofuels. member state shall ensure that support for electricity from renewable source is granted in an open, transparent, competitive and cost-effective manner.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.83
-51813
-26
-eu directive aims to ensure harmonised regulation of electronic communication network, associated facility and associated service. member state shall ensure that national regulatory and other competent authority are impartial, transparent and proportionate. member state may restrict or withdraw right to use radio spectrum.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-2208
-the regulation applies to the monitoring and reporting by member state and manufacturer of heavy-duty vehicle. it applies with regard to the following vehicle category. data relating to new heavy-duty vehicle registered in the union shall be monitored and reported by 28 february each year.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.83
-15661
-8
-luxembourg, slovenia and sweden shall inform the commission of any change in the situation. slovenia and sweden shall not be bound by the obligation laid down in paragraph 1 of this article. but they shall endeavour to meet it in accordance with article 6 of the directive.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.78
-8895
-5
-eu directive provides for the labelling of those product placed on market. it provides for the provision of standard product information regarding energy efficiency. directive 2010/30/eu is repealed with effect from 1 august 2017.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-34094
-17
-eu directive aims to ensure that personal data are processed lawfully. the regulation applies to the processing of personal data of data subject who are in the union. a data subject has the right to withdraw consent at any time. the data subject has the right to have inaccurate personal data rectified, erased or blocked.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-4713
-3
-harmonised index of consumer price ( hicp, hicp-ct, ooh price index ) and of the house price index ( hpi ) at union and national level. member state shall provide the commission with the harmonised index and all sub-indices by no later than february.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.82
-17067
-9
-dumping shall be investigated by the commission or to a member state. investigation shall cover both dumping and injury. member state may request a review of the anti-dumping duty.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-15049
-8
-investigation shall cover both subsidy and injury. commission shall inform member state of the investigation. investigation shall be concluded within nine month.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.80
-18771
-10
-eu guarantee shall be provided for financing and investment operation. it shall be provided by the implementing partner to the extent that it is available. it is intended to be used to support the policy objective of the union.
+<pre>654
+equipment using ultra-wideband technology is defined as equipment. equipment using ultra-wideband technology must meet technical condition. equipment using ultra-wideband technology must be used indoors.
 </pre>
 </div>
 </div>
@@ -9576,9 +7654,8 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>T5 BertScore F1: 0.79
-12982
-7
-the recovery and resilience facility is a new eu instrument. it aims to support member states in achieving milestones and targets. the maximum financial contribution shall be calculated for each member state.
+3116
+agreement shall apply to civil aviation regulatory system of the people's republic of china and the civil aviation regulatory system of the european union. parties agree to cooperate in all areas of civil aviation safety. agreement shall be binding on both parties and shall remain in force until terminated by either party.
 </pre>
 </div>
 </div>
@@ -9594,9 +7671,153 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>T5 BertScore F1: 0.81
-4734
+92
+the technical specification for electronic ship reporting in inland navigation shall be a set out in the annex. regulation shall enter into force on the day following that of it publication in the official journal of the european union. it shall apply not later than 30 month after it entry into force.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>T5 BertScore F1: 0.78
+2577
+eu regulation establishes requirement for the labelling of electric mains-operated refrigerating appliance with a direct sale function. it shall enter into force on the twentieth day following that of it publication in the official journal of the european union.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>T5 BertScore F1: 0.81
+2877
+light source and separate control gear must comply with ecodesign requirement. they must be placed on the market in a containing product and be replaceable. light source and separate control gear must be available on a free-access website.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>T5 BertScore F1: 0.80
+0.7979308128356933
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f766a8ea-8d1c-4e62-94ee-f2e994ae883b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The following test was done to assess the performance on the model on texts that it must split in chunks to perform the summarization task</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=54d5da47-d120-4303-ad26-d1ca8f9cda05">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">F1_t5_more_4096</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">train_df</span><span class="p">[</span><span class="n">train_df</span><span class="p">[</span><span class="s1">'reference_tokens'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">4096</span><span class="p">][:</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">reference_text</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"reference"</span><span class="p">]</span>
+    <span class="n">reference_summary</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"summary"</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"reference_tokens"</span><span class="p">])</span>
+
+    <span class="n">result_summary</span> <span class="o">=</span> <span class="n">ReadingWithJumpingWindow</span><span class="p">(</span><span class="n">model_t5</span><span class="p">,</span> <span class="n">tokenizer_t5</span><span class="p">,</span> <span class="n">reference_text</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result_summary</span><span class="p">)</span>
+    <span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">F1</span> <span class="o">=</span> <span class="n">score</span><span class="p">([</span><span class="n">result_summary</span><span class="p">],</span> <span class="p">[</span><span class="n">reference_summary</span><span class="p">],</span> <span class="n">lang</span><span class="o">=</span><span class="s1">'en'</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"T5 BertScore F1: </span><span class="si">{</span><span class="n">F1</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">F1_t5_more_4096</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">F1</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">'F1_t5_more_4096.npy'</span><span class="p">,</span> <span class="n">F1_t5_more_4096</span><span class="p">)</span>
+
+<span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">F1_t5_more_4096</span><span class="p">:</span>
+    <span class="nb">sum</span> <span class="o">+=</span> <span class="n">_</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">F1_t5_more_4096</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>8443
+5
+eu has adopted a set of rules to regulate the disclosure of information in prospectuses and security notes. the rules apply to all securities issued by a regulated market or by a third country. the information must be provided in the order in which they are required.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>T5 BertScore F1: 0.80
+19979
+10
+account governed by the law and fall under the jurisdiction of the member state of their administrator. account holder may object to the suspension of access to account if it is not resolved within a reasonable period. account holder may report any fraud or suspected fraud to the competent national law enforcement authority.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>T5 BertScore F1: 0.78
+5394
 3
-the instrument is to be used to support member state in implementing reform. it is necessary to encourage investment and to increase competitiveness. by 2025, the commission shall provide to the european parliament and the council a mid-term evaluation report.
+eu innovation fund is intended to support projects demonstrating high level of innovation. the fund is intended to be used to support projects reducing greenhouse gas emissions. the commission shall invite the proponent of those project to submit a full application.
 </pre>
 </div>
 </div>
@@ -9611,8 +7832,44 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>T5 BertScore F1: 0.81
-0.8115833659966787
+<pre>T5 BertScore F1: 0.82
+7139
+4
+uas operator shall declare to the competent authority that they are able to carry out the operation. uas operator shall register themselves in the member state where they have their residence or principal place of business. uas operator shall provide the competent authority with the information required to carry out the operation.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>T5 BertScore F1: 0.79
+10476
+6
+eu regulation applies to uas intended to be operated in the 'open' category. it also applies to uas intended to be operated in the'specific' category. it establishes rule on making uas available on the market and their free movement.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>Some weights of RobertaModel were not initialized from the model checkpoint at roberta-large and are newly initialized: ['roberta.pooler.dense.bias', 'roberta.pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>T5 BertScore F1: 0.80
+0.7999849915504456
 </pre>
 </div>
 </div>
