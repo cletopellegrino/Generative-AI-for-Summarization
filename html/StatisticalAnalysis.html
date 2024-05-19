@@ -7886,13 +7886,15 @@ C:\Python312\Lib\site-packages\seaborn\_base.py:949: FutureWarning: When groupin
 <div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">kruskal_result</span> <span class="o">=</span> <span class="n">kruskal</span><span class="p">(</span><span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 small trained'</span><span class="p">],</span> \
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">wilcoxon</span>
+
+<span class="n">wilcoxon_result</span> <span class="o">=</span> <span class="n">wilcoxon</span><span class="p">(</span><span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 small trained'</span><span class="p">],</span> \
                          <span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 large untrained'</span><span class="p">])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Kruskal-Wallis statistic:"</span><span class="p">,</span> <span class="n">kruskal_result</span><span class="o">.</span><span class="n">statistic</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"p value:"</span><span class="p">,</span> <span class="n">kruskal_result</span><span class="o">.</span><span class="n">pvalue</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Wilcoxon statistic:"</span><span class="p">,</span> <span class="n">wilcoxon_result</span><span class="o">.</span><span class="n">statistic</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"p value:"</span><span class="p">,</span> <span class="n">wilcoxon_result</span><span class="o">.</span><span class="n">pvalue</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">kruskal_result</span><span class="o">.</span><span class="n">pvalue</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">wilcoxon_result</span><span class="o">.</span><span class="n">pvalue</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"There is a statistically relevant difference between at least 2 groups (T5)."</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"No statistically relevant difference between groups (T5)."</span><span class="p">)</span>
@@ -7908,8 +7910,8 @@ C:\Python312\Lib\site-packages\seaborn\_base.py:949: FutureWarning: When groupin
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Kruskal-Wallis statistic: 0.7297297297297263
-p value: 0.3929708076289571
+<pre>Wilcoxon statistic: 74.0
+p value: 0.6396942138671875
 No statistically relevant difference between groups (T5).
 </pre>
 </div>
@@ -7921,7 +7923,7 @@ No statistically relevant difference between groups (T5).
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">scoresT5</span> <span class="o">=</span> <span class="p">{</span>
@@ -7938,7 +7940,7 @@ No statistically relevant difference between groups (T5).
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">scoresT5</span><span class="p">:</span>
@@ -7947,7 +7949,7 @@ No statistically relevant difference between groups (T5).
     <span class="n">data</span><span class="o">.</span><span class="n">boxplot</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">ticks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> boxplot.png"</span><span class="p">)</span>
+    <span class="c1">#plt.savefig(f"{key} boxplot.png")</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -7977,7 +7979,7 @@ No statistically relevant difference between groups (T5).
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">scoresT5</span><span class="p">:</span>
@@ -7987,7 +7989,7 @@ No statistically relevant difference between groups (T5).
         <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> KDE plot.png"</span><span class="p">)</span>
+    <span class="c1">#plt.savefig(f"{key} KDE plot.png")</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -8017,7 +8019,7 @@ No statistically relevant difference between groups (T5).
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [26]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">scoresT5</span> <span class="o">=</span> <span class="p">{</span>
@@ -8036,13 +8038,13 @@ No statistically relevant difference between groups (T5).
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">df_scoresT5</span><span class="o">.</span><span class="n">boxplot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">ticks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_scoresT5</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="n">df_scoresT5</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"T5 num_beams boxplot.png"</span><span class="p">)</span>
+<span class="c1">#plt.savefig("T5 num_beams boxplot.png")</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -8066,12 +8068,12 @@ No statistically relevant difference between groups (T5).
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df_scoresT5</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"T5 num_beams KDE plot.png"</span><span class="p">)</span>
+<span class="c1">#plt.savefig("T5 num_beams KDE plot.png")</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -8107,7 +8109,7 @@ C:\Python312\Lib\site-packages\seaborn\_base.py:949: FutureWarning: When groupin
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [29]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df_scoresT5</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
@@ -8116,7 +8118,7 @@ C:\Python312\Lib\site-packages\seaborn\_base.py:949: FutureWarning: When groupin
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Normal distribution quantiles'</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Data quantiles'</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">"T5_Test_QQ_Plot_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">.png"</span><span class="p">)</span>
+    <span class="c1">#plt.savefig(f"T5_Test_QQ_Plot_{col}.png")</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -8147,7 +8149,7 @@ C:\Python312\Lib\site-packages\seaborn\_base.py:949: FutureWarning: When groupin
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">statistic</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">levene</span><span class="p">(</span><span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 num_beams = 1'</span><span class="p">],</span> \
@@ -8185,16 +8187,16 @@ There is no evidence to reject the null hypothesis of equal variances (homosceda
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [31]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">kruskal_result</span> <span class="o">=</span> <span class="n">kruskal</span><span class="p">(</span><span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 num_beams = 1'</span><span class="p">],</span> \
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">wilcoxon_result</span> <span class="o">=</span> <span class="n">wilcoxon</span><span class="p">(</span><span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 num_beams = 1'</span><span class="p">],</span> \
                          <span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 num_beams = 4'</span><span class="p">])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Kruskal-Wallis statistic:"</span><span class="p">,</span> <span class="n">kruskal_result</span><span class="o">.</span><span class="n">statistic</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"p value:"</span><span class="p">,</span> <span class="n">kruskal_result</span><span class="o">.</span><span class="n">pvalue</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Wilcoxon statistic:"</span><span class="p">,</span> <span class="n">wilcoxon_result</span><span class="o">.</span><span class="n">statistic</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"p value:"</span><span class="p">,</span> <span class="n">wilcoxon_result</span><span class="o">.</span><span class="n">pvalue</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">kruskal_result</span><span class="o">.</span><span class="n">pvalue</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">wilcoxon_result</span><span class="o">.</span><span class="n">pvalue</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"There is a statistically relevant difference between at least 2 groups (T5)."</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"No statistically relevant difference between groups (T5)."</span><span class="p">)</span>
@@ -8210,8 +8212,8 @@ There is no evidence to reject the null hypothesis of equal variances (homosceda
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Kruskal-Wallis statistic: 1.3945983692240218
-p value: 0.23763007754812648
+<pre>Wilcoxon statistic: 7929.0
+p value: 0.245906657194636
 No statistically relevant difference between groups (T5).
 </pre>
 </div>
@@ -8223,16 +8225,18 @@ No statistically relevant difference between groups (T5).
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [32]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">anova_result</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">f_oneway</span><span class="p">(</span><span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 num_beams = 1'</span><span class="p">],</span>\
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">ttest_ind</span>
+
+<span class="n">ttest_result</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span><span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 num_beams = 1'</span><span class="p">],</span>\
                               <span class="n">scoresT5</span><span class="p">[</span><span class="s1">'T5 num_beams = 4'</span><span class="p">])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"ANOVA statistic:"</span><span class="p">,</span> <span class="n">anova_result</span><span class="o">.</span><span class="n">statistic</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"p value:"</span><span class="p">,</span> <span class="n">anova_result</span><span class="o">.</span><span class="n">pvalue</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"T-Test statistic:"</span><span class="p">,</span> <span class="n">ttest_result</span><span class="o">.</span><span class="n">statistic</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"p value:"</span><span class="p">,</span> <span class="n">ttest_result</span><span class="o">.</span><span class="n">pvalue</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">anova_result</span><span class="o">.</span><span class="n">pvalue</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">ttest_result</span><span class="o">.</span><span class="n">pvalue</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"There is a statistically relevant difference between at least 2 groups (T5)."</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"No statistically relevant difference between groups (T5)."</span><span class="p">)</span>
@@ -8248,8 +8252,8 @@ No statistically relevant difference between groups (T5).
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>ANOVA statistic: 0.8481878018349209
-p value: 0.35766236569944365
+<pre>T-Test statistic: 0.9209711188929747
+p value: 0.35766236569941423
 No statistically relevant difference between groups (T5).
 </pre>
 </div>
